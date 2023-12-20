@@ -3,7 +3,12 @@ url = 'https://raw.githubusercontent.com/usnmweb/python-AMA/main/csv/filmtv_movi
 df = pd.read_csv(url)
 df.columns
 
+print(len(df.index), len(df.columns))  
 
-avg_vote_title = df['avg_vote'].idxmax()
-avg_title_max = df.loc[avg_vote_title, "title"]
-print("il voto medio piu alto di un film è di:",avg_title_max )
+df = df.dropna()
+print(df.shape)
+
+
+top_five = df.sort_values(by='avg_vote', ascending=False).head(5)
+list_of_columns = ["title" ,"year", "genre"]
+print("la top 5 con il voto medio piu alto sono:",top_five[list_of_columns])
