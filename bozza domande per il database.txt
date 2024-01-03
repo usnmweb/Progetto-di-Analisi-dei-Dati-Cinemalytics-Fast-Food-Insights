@@ -1,0 +1,27 @@
+
+1 film per genere con il voto più alto.
+
+2 l'attore che ha fatto più film.
+
+3 qual'è lo stato fa più film.
+
+4 la coppia direttore-attore più frequente.
+
+5 quanto è proficua la coppia direttore-attore?
+
+6 quanti film sono basati su true stories?
+
+7 quanti film humor sono i più divertenti secondo il puntodi vista del pubblico.
+
+8 quale anno è stato più proficuo per i film humor?
+
+9 qual'è la % di differenza tra la critica professionale e il pubblico?
+
+10 in quali stati di produzione gli attori fanno più film.
+
+11 il film che ha guadaganto di più.
+
+12 l'attore più pagato.
+
+
+
