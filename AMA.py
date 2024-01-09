@@ -3,11 +3,16 @@ url = 'https://raw.githubusercontent.com/usnmweb/python-AMA/main/csv/filmtv_movi
 df = pd.read_csv(url)
 df.columns
 
+# 1) Top 5 
+
+#    Con questo codice abbiamo trovato la top 5 dei film con il voto medio più alto.
+#    Per farlo abbiamo filtrato in ordine decrescente la colonna dei voti e
+#    ne abbiamo "Tagliato la testa" prendendo il titolo, l'anno e il genere dei primi cinque risultati.
+
+
 print(len(df.index), len(df.columns))  
 
 df = df.dropna()
-print(df.shape)
-
 
 top_five = df.sort_values(by='avg_vote', ascending=False).head(5)
 list_of_columns = ["title" ,"year", "genre"]
@@ -24,8 +29,89 @@ y = short_df["avg_vote"]
 
 plt.bar(x, y)
 
-
-
 plt.ylim(9, 10.1)
 
 plt.show()
+
+# Fine 1 
+
+# 2) Attore che ha fatto più film.
+
+#    Con questo codice abbiamo trovato gli attori che hanno recitato in più film.
+#   Per farlo abbiamo ripulito la colonna degli attori dai valori che non ci interessavano (Nan e Attori non professionisti)
+#    poi abbiamo ricava
+
+
+df_filtered = df[df['actors'] != 'Attori non professionisti']
+
+
+actor_counts = df_filtered['actors'].value_counts()
+
+
+most_films_actor = actor_counts.idxmax()
+number_of_films = actor_counts.loc[most_films_actor]
+
+
+
+print(f"{most_films_actor} appeared in {number_of_films} films.")
+
+# Fine 2 
+
+
+# 3) Regista con più film
+
+
+director_counts = df['directors'].value_counts()
+
+
+most_films_director = director_counts.idxmax()
+number_of_films = director_counts.loc[most_films_director]
+
+
+
+print(f"{most_films_director} directed {number_of_films} films.")
+
+# Fine 3 
+
+# 4) Stato 
+
+movies_for_country = df['country'].value_counts()
+# Conto i film per stato
+
+country_with_more_movies = movies_for_country.idxmax()
+# trovo stato con la maggiore quantità di film realizzati
+
+print("The state with more movies is:",movies_for_country)
+
+# Fine 4
+
+
+# 5) Direttore/attore più frequente 
+
+df_filtered_2 = df[df['actors'] != 'Attori non professionisti']
+
+
+df_filtered_2['directors_actors'] = df_filtered_2['directors'] + ' - ' + df_filtered_2['actors']
+
+
+director_actor_counts = df_filtered_2['directors_actors'].value_counts()
+
+
+most_frequent_pair = director_actor_counts.idxmax()
+number_of_films = director_actor_counts.loc[most_frequent_pair]
+
+
+print(f"The most frequent director-actor pair is: {most_frequent_pair}")
+print(f"They worked together in {number_of_films} films.")
+
+# fine 5
+
+# 6) Storia vera
+
+
+true_story_counts = df['description'].str.contains('true story', case=False).sum()
+
+
+print(f"The number of films with 'true story' in the description is: {true_story_counts}")
+
+# fine 6
