@@ -1,3 +1,5 @@
-Python Start
+Python DF to use
 
 https://www.kaggle.com/datasets/stefanoleone992/filmtv-movies-dataset
+
+https://www.kaggle.com/datasets/vinifm/female-representation-in-cinema

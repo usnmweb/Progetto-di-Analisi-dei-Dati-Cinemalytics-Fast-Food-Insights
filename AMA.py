@@ -38,7 +38,7 @@ plt.show()
 # 2) Attore che ha fatto più film.
 
 #    Con questo codice abbiamo trovato gli attori che hanno recitato in più film.
-#   Per farlo abbiamo ripulito la colonna degli attori dai valori che non ci interessavano (Nan e Attori non professionisti)
+#    Per farlo abbiamo ripulito la colonna degli attori dai valori che non ci interessavano (Nan e Attori non professionisti)
 #    poi abbiamo ricava
 
 
@@ -115,3 +115,19 @@ true_story_counts = df['description'].str.contains('true story', case=False).sum
 print(f"The number of films with 'true story' in the description is: {true_story_counts}")
 
 # fine 6
+
+
+# 7) I film più divertenti secondo il voto del pubblico
+
+
+comedy_films = df[df['genre'].str.contains('Comedy', case=False)]
+
+
+sorted_comedy_films = comedy_films.sort_values(by='public_vote', ascending=False)
+
+
+most_humorous_films = sorted_comedy_films.head(5)
+print("The most humorous comedy films according to the audience:")
+print(most_humorous_films[['title', 'public_vote']])
+
+#fine 7
