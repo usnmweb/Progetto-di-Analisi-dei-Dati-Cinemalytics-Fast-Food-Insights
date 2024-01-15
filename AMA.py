@@ -131,3 +131,36 @@ print("The most humorous comedy films according to the audience:")
 print(most_humorous_films[['title', 'public_vote']])
 
 #fine 7
+
+#Add 2* df
+#Abbiamo importato e pulito il secondo df sui report delle vedite dei ristorant 
+
+import pandas as pd
+url = 'https://raw.githubusercontent.com/usnmweb/python-AMA/main/csv/Balaji%20Fast%20Food%20Sales.csv'
+df_food = pd.read_csv(url)
+df_food.columns
+
+df_food = df_food.dropna()
+
+print(len(df_food.index), len(df_food.columns)) #893 10
+
+
+# mergiato e pulito il nuovo df formato dai due precedenti
+
+
+df_food['year'] = pd.to_datetime(df_food['date']).dt.year
+
+
+merged_df = pd.merge(df, df_food, on='year')
+
+print(len(merged_df.index), len(merged_df.columns))
+
+merged_df = merged_df.dropna()
+
+print(len(merged_df.index), len(merged_df.columns))
+
+
+
+merged_df.columns
+
+print(len(merged_df.index), len(merged_df.columns))
