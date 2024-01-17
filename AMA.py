@@ -61,15 +61,21 @@ print(f"{most_films_actor} appeared in {number_of_films} films.")
 # 3) Regista con più film
 
 
+# Calcola la distribuzione del numero di film diretti da ciascun regista
 director_counts = df['directors'].value_counts()
 
+# Seleziona le prime 10 registi con il maggior numero di film per rendere il grafico più leggibile
+top_directors = director_counts.head(10)
 
-most_films_director = director_counts.idxmax()
-number_of_films = director_counts.loc[most_films_director]
+# Crea un grafico a barre
+plt.figure(figsize=(12, 6))
+top_directors.plot(kind='bar', color='skyblue')
+plt.title('Top 10 Directors with Most Films')
+plt.xlabel('Director')
+plt.ylabel('Number of Films')
+plt.xticks(rotation=45, ha='right')  # Ruota le etichette sull'asse x per una migliore leggibilità
+plt.show()
 
-
-
-print(f"{most_films_director} directed {number_of_films} films.")
 
 # Fine 3 
 
@@ -120,11 +126,21 @@ plt.show()
 
 # 6) Storia vera
 
-
+# Conta il numero di film con la dicitura 'true story' nella descrizione
 true_story_counts = df['description'].str.contains('true story', case=False).sum()
 
+# Calcola il numero di film che non contengono la dicitura 'true story'
+non_true_story_counts = len(df) - true_story_counts
 
-print(f"The number of films with 'true story' in the description is: {true_story_counts}")
+# Crea un grafico a torta
+labels = ['True Story', 'Not True Story']
+sizes = [true_story_counts, non_true_story_counts]
+colors = ['gold', 'lightcoral']
+
+plt.figure(figsize=(8, 8))
+plt.pie(sizes, labels=labels, colors=colors, autopct='%1.1f%%', startangle=140)
+plt.title('Distribution of Films Based on "True Story"')
+plt.show()
 
 # fine 6
 
@@ -229,3 +245,27 @@ most_received_by = most_transaction_info[2]
 print("Country with the most transaction amount:", most_transaction_country)
 print("Transaction type with the most transaction amount:", most_transaction_type)
 print("Received by with the most transaction amount:", most_received_by)
+
+
+# 10)
+
+df_food['year'] = pd.to_datetime(df_food['date']).dt.year
+
+
+merged_df = pd.merge(df, df_food, on='year')
+
+
+categories = ['year', 'genre', 'time_of_sale', 'item_type', 'item_price']
+
+
+fig, axes = plt.subplots(1, len(categories), figsize=(18, 6))
+fig.suptitle('Top 5 Most Popular in Each Category')
+
+for i, category in enumerate(categories):
+    top_values_by_category = merged_df.groupby([category]).size().nlargest(5)
+    
+    
+    axes[i].pie(top_values_by_category, labels=top_values_by_category.index, autopct='%1.1f%%', startangle=90)
+    axes[i].set_title(f'Top 5 {category.capitalize()}')
+
+plt.show()
