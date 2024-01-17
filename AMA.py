@@ -76,33 +76,45 @@ print(f"{most_films_director} directed {number_of_films} films.")
 # 4) Stato 
 
 movies_for_country = df['country'].value_counts()
-# Conto i film per stato
 
-country_with_more_movies = movies_for_country.idxmax()
-# trovo stato con la maggiore quantità di film realizzati
+top_countries = movies_for_country.head(10)
 
-print("The state with more movies is:",movies_for_country)
+country_with_more_movies = top_countries.idxmax()
+print("The country with the most movies is:", country_with_more_movies)
+
+top_countries.plot(kind='bar', figsize=(12, 6), color='skyblue')
+plt.title('Top 10 Countries with the Most Movies')
+plt.xlabel('Country')
+plt.ylabel('Number of Movies')
+plt.show()
 
 # Fine 4
 
 
 # 5) Direttore/attore più frequente 
 
+import seaborn as sns
+
+
+# Filtra i film con attori professionisti
 df_filtered_2 = df[df['actors'] != 'Attori non professionisti']
 
-
+# Combina le colonne 'directors' e 'actors'
 df_filtered_2['directors_actors'] = df_filtered_2['directors'] + ' - ' + df_filtered_2['actors']
 
-
+# Calcola le frequenze
 director_actor_counts = df_filtered_2['directors_actors'].value_counts()
 
+# Seleziona le prime 10 coppie più frequenti per rendere il grafico più leggibile
+top_pairs = director_actor_counts.head(10)
 
-most_frequent_pair = director_actor_counts.idxmax()
-number_of_films = director_actor_counts.loc[most_frequent_pair]
-
-
-print(f"The most frequent director-actor pair is: {most_frequent_pair}")
-print(f"They worked together in {number_of_films} films.")
+# Crea un grafico a barre
+plt.figure(figsize=(12, 6))
+sns.barplot(x=top_pairs.values, y=top_pairs.index, palette="viridis")
+plt.title('Top 10 Director-Actor Pairs in Films')
+plt.xlabel('Number of Films')
+plt.ylabel('Director-Actor Pair')
+plt.show()
 
 # fine 5
 
@@ -164,3 +176,56 @@ print(len(merged_df.index), len(merged_df.columns))
 merged_df.columns
 
 print(len(merged_df.index), len(merged_df.columns))
+
+
+# 8)  Film più popolare, giorno di picco e prodotto maggiormente ordinato
+
+df_food['year'] = pd.to_datetime(df_food['date']).dt.year
+
+
+merged_df = pd.merge(df, df_food, on='year')
+
+
+top_films_by_year = merged_df.groupby(['year', 'title']).size().groupby('year').nlargest(2).reset_index(level=0, drop=True)
+
+
+top_dates_by_year = merged_df.groupby(['year', 'date']).size().groupby('year').nlargest(2).reset_index(level=0, drop=True)
+
+
+top_items_by_year = merged_df.groupby(['year', 'item_name']).size().groupby('year').nlargest(2).reset_index(level=0, drop=True)
+
+
+fig, axes = plt.subplots(1, 3, figsize=(18, 6))
+fig.suptitle('Top 4 Most Popular in Each Category')
+
+
+axes[0].pie(top_films_by_year, labels=top_films_by_year.index, autopct='%1.1f%%', startangle=90)
+axes[0].set_title('Top 4 Films')
+
+
+axes[1].pie(top_dates_by_year, labels=top_dates_by_year.index, autopct='%1.1f%%', startangle=90)
+axes[1].set_title('Top 4 Dates')
+
+
+axes[2].pie(top_items_by_year, labels=top_items_by_year.index, autopct='%1.1f%%', startangle=90)
+axes[2].set_title('Top 4Item Names')
+
+plt.show()
+
+# 9) Lo stato in cui sono state fatte più transazioni, metodo di pagamento, genere operatore che ha ricevuto l'ordine
+
+df_food['year'] = pd.to_datetime(df_food['date']).dt.year
+
+
+merged_df = pd.merge(df, df_food, on='year')
+
+
+most_transaction_info = merged_df.groupby(['country', 'transaction_type', 'received_by'])['transaction_amount'].sum().idxmax()
+
+most_transaction_country = most_transaction_info[0]
+most_transaction_type = most_transaction_info[1]
+most_received_by = most_transaction_info[2]
+
+print("Country with the most transaction amount:", most_transaction_country)
+print("Transaction type with the most transaction amount:", most_transaction_type)
+print("Received by with the most transaction amount:", most_received_by)
